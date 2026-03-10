@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>رسالة من القلب</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html,body{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      font-family:Arial,sans-serif;
+      background:#0b0b18;
+    }
+
+    body{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+    }
+
+    .bg{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,110,196,0.16), transparent 28%),
+        radial-gradient(circle at 80% 30%, rgba(120,119,255,0.16), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(255,180,220,0.08), transparent 28%),
+        linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      background-size:140% 140%;
+      animation:bgMove 13s ease-in-out infinite alternate;
+      z-index:0;
+    }
+
+    .bg::before,
+    .bg::after{
+      content:"";
+      position:absolute;
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      filter:blur(80px);
+      opacity:.20;
+      animation:floatGlow 10s ease-in-out infinite;
+    }
+
+    .bg::before{
+      background:#ff5fa2;
+      top:-90px;
+      right:-70px;
+    }
+
+    .bg::after{
+      background:#8f7bff;
+      bottom:-100px;
+      left:-90px;
+      animation-delay:2.3s;
+    }
+
+    @keyframes bgMove{
+      0%{background-position:0% 50%;}
+      100%{background-position:100% 50%;}
+    }
+
+    @keyframes floatGlow{
+      0%,100%{transform:translateY(0) scale(1);}
+      50%{transform:translateY(22px) scale(1.08);}
+    }
+
+    .particles,
+    .petals,
+    .roses{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      pointer-events:none;
+    }
+
+    .particles{ z-index:1; }
+    .petals{ z-index:3; }
+    .roses{ z-index:2; }
+
+    .spark{
+      position:absolute;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:rgba(255,255,255,.75);
+      box-shadow:0 0 18px rgba(255,255,255,.9);
+      animation:sparkFloat linear infinite;
+      opacity:.6;
+    }
+
+    @keyframes sparkFloat{
+      0%{
+        transform:translateY(20px) scale(.8);
+        opacity:0;
+      }
+      20%{
+        opacity:.75;
+      }
+      100%{
+        transform:translateY(-120vh) scale(1.2);
+        opacity:0;
+      }
+    }
+
+    .petal{
+      position:absolute;
+      width:18px;
+      height:18px;
+      opacity:0;
+      animation:petalUp linear forwards;
+      filter:drop-shadow(0 0 10px rgba(255,170,210,.35));
+    }
+
+    .petal::before,
+    .petal::after{
+      content:"";
+      position:absolute;
+      width:12px;
+      height:18px;
+      background:linear-gradient(180deg, rgba(255,220,235,.98), rgba(255,125,175,.85));
+      border-radius:12px 12px 0 12px;
+    }
+
+    .petal::before{
+      left:2px;
+      transform:rotate(-32deg);
+      transform-origin:bottom center;
+    }
+
+    .petal::after{
+      right:2px;
+      transform:rotate(32deg) scaleX(-1);
+      transform-origin:bottom center;
+    }
+
+    @keyframes petalUp{
+      0%{
+        transform:translateY(0) rotate(0deg) scale(.7);
+        opacity:0;
+      }
+      12%{
+        opacity:1;
+      }
+      100%{
+        transform:translateY(-260px) rotate(24deg) scale(1.15);
+        opacity:0;
+      }
+    }
+
+    .rose{
+      position:absolute;
+      bottom:-80px;
+      width:46px;
+      height:120px;
+      opacity:0;
+      animation:roseGrow 3.4s ease forwards;
+      transform-origin:bottom center;
+    }
+
+    .rose .stem{
+      position:absolute;
+      bottom:0;
+      left:50%;
+      width:4px;
+      height:84px;
+      transform:translateX(-50%);
+      background:linear-gradient(180deg, #8fe388, #2f8a45);
+      border-radius:6px;
+      box-shadow:0 0 10px rgba(120,255,160,.18);
+    }
+
+    .rose .leaf{
+      position:absolute;
+      width:18px;
+      height:10px;
+      background:linear-gradient(180deg, #7ce28e, #2d8a48);
+      border-radius:18px 0 18px 0;
+      top:55px;
+      left:50%;
+      box-shadow:0 0 8px rgba(120,255,160,.12);
+    }
+
+    .rose .leaf.left{
+      transform:translateX(-16px) rotate(-32deg);
+    }
+
+    .rose .leaf.right{
+      transform:translateX(0px) rotate(148deg);
+    }
+
+    .rose .bloom{
+      position:absolute;
+      top:0;
+      left:50%;
+      width:34px;
+      height:34px;
+      transform:translateX(-50%);
+    }
+
+    .rose .bloom span{
+      position:absolute;
+      inset:0;
+      border-radius:60% 40% 60% 40%;
+      background:radial-gradient(circle at 35% 30%, #ffd7e8, #ff73a9 70%, #d93f78 100%);
+      box-shadow:0 0 14px rgba(255,105,160,.24);
+    }
+
+    .rose .bloom span:nth-child(1){ transform:rotate(0deg) scale(.95); }
+    .rose .bloom span:nth-child(2){ transform:rotate(45deg) scale(.88); }
+    .rose .bloom span:nth-child(3){ transform:rotate(90deg) scale(.78); }
+    .rose .bloom span:nth-child(4){ transform:rotate(135deg) scale(.65); }
+
+    @keyframes roseGrow{
+      0%{
+        transform:scale(.2) translateY(40px);
+        opacity:0;
+      }
+      35%{
+        opacity:1;
+      }
+      70%{
+        transform:scale(1) translateY(0);
+        opacity:1;
+      }
+      100%{
+        transform:scale(1.05) translateY(-20px);
+        opacity:0;
+      }
+    }
+
+    .flash{
+      position:fixed;
+      inset:0;
+      background:radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0));
+      opacity:0;
+      pointer-events:none;
+      z-index:4;
+    }
+
+    .flash.show{
+      animation:flashAnim 1s ease forwards;
+    }
+
+    @keyframes flashAnim{
+      0%{opacity:0;}
+      20%{opacity:1;}
+      100%{opacity:0;}
+    }
+
+    .noor-intro{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:8;
+      pointer-events:none;
+      transition:opacity 1s ease, transform 1s ease;
+    }
+
+    .noor-intro.hide{
+      opacity:0;
+      transform:scale(1.05);
+    }
+
+    .noor-text{
+      font-size:54px;
+      font-weight:700;
+      letter-spacing:10px;
+      color:#fff;
+      text-transform:uppercase;
+      text-shadow:
+        0 0 18px rgba(255,170,210,.40),
+        0 0 36px rgba(160,130,255,.28),
+        0 0 60px rgba(255,255,255,.12);
+      animation:noorPulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes noorPulse{
+      0%,100%{transform:scale(1); opacity:.92;}
+      50%{transform:scale(1.04); opacity:1;}
+    }
+
+    .watermark{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:2;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity 1.4s ease;
+    }
+
+    .watermark.show{
+      opacity:1;
+    }
+
+    .watermark span{
+      font-size:min(26vw, 170px);
+      font-weight:700;
+      letter-spacing:18px;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.045);
+      text-shadow:
+        0 0 20px rgba(255,180,220,.04),
+        0 0 38px rgba(160,140,255,.03);
+      transform:rotate(-14deg);
+    }
+
+    .screen{
+      position:relative;
+      z-index:6;
+      width:100%;
+      max-width:460px;
+      padding:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+    }
+
+    .start-wrap{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      transition:all .8s ease;
+    }
+
+    .start-wrap.hide{
+      opacity:0;
+      transform:scale(1.15);
+      pointer-events:none;
+    }
+
+    .start-btn{
+      border:none;
+      outline:none;
+      color:#fff;
+      font-size:22px;
+      font-weight:bold;
+      padding:18px 34px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.08));
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:
+        0 0 20px rgba(255,120,180,.25),
+        0 0 40px rgba(150,120,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.25);
+      animation:breathe 3s ease-in-out infinite;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .start-btn::before{
+      content:"";
+      position:absolute;
+      top:0;
+      right:-120%;
+      width:70%;
+      height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+      transform:skewX(-24deg);
+      animation:shine 3.2s ease-in-out infinite;
+    }
+
+    @keyframes breathe{
+      0%,100%{
+        transform:scale(1);
+        box-shadow:
+          0 0 20px rgba(255,120,180,.25),
+          0 0 40px rgba(150,120,255,.18),
+          inset 0 1px 0 rgba(255,255,255,.25);
+      }
+      50%{
+        transform:scale(1.04);
+        box-shadow:
+          0 0 28px rgba(255,120,180,.45),
+          0 0 55px rgba(150,120,255,.28),
+          inset 0 1px 0 rgba(255,255,255,.35);
+      }
+    }
+
+    @keyframes shine{
+      0%{right:-120%;}
+      100%{right:140%;}
+    }
+
+    .content{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transform:translateY(30px) scale(.96);
+      pointer-events:none;
+      transition:all 1s cubic-bezier(.22,1,.36,1);
+    }
+
+    .content.show{
+      opacity:1;
+      transform:translateY(0) scale(1);
+      pointer-events:auto;
+    }
+
+    .card{
+      width:100%;
+      max-width:360px;
+      border-radius:30px;
+      padding:22px 18px 18px;
+      background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.18);
+      position:relative;
+      overflow:hidden;
+      animation:cardFloat 5s ease-in-out infinite;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      border-radius:30px;
+      padding:1px;
+      background:linear-gradient(135deg, rgba(255,255,255,.30), rgba(255,255,255,.04));
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;
+      mask-composite:exclude;
+      pointer-events:none;
+    }
+
+    @keyframes cardFloat{
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-8px);}
+    }
+
+    .mini-label{
+      text-align:center;
+      font-size:12px;
+      letter-spacing:2px;
+      color:rgba(255,255,255,.72);
+      margin-bottom:10px;
+    }
+
+    .title{
+      text-align:center;
+      font-size:30px;
+      font-weight:bold;
+      margin-bottom:12px;
+      line-height:1.5;
+      text-shadow:
+        0 0 16px rgba(255,170,210,.22),
+        0 0 30px rgba(200,170,255,.16);
+      opacity:0;
+      transform:translateY(18px);
+    }
+
+    .title.show{
+      animation:titleIn 1s ease forwards;
+    }
+
+    @keyframes titleIn{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .divider{
+      width:74px;
+      height:2px;
+      margin:0 auto 14px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent);
+      box-shadow:0 0 14px rgba(255,255,255,.35);
+      opacity:0;
+      transform:scaleX(.5);
+    }
+
+    .divider.show{
+      animation:dividerIn .9s ease forwards;
+      animation-delay:.25s;
+    }
+
+    @keyframes dividerIn{
+      to{
+        opacity:1;
+        transform:scaleX(1);
+      }
+    }
+
+    .message-box{
+      min-height:170px;
+      padding:6px 4px 0;
+    }
+
+    .line{
+      opacity:0;
+      transform:translateY(16px);
+      margin:11px 0;
+      font-size:18px;
+      line-height:1.95;
+      color:#fff;
+      text-align:center;
+      text-shadow:0 0 10px rgba(255,255,255,.06);
+    }
+
+    .line.show{
+      animation:lineIn .9s ease forwards;
+    }
+
+    @keyframes lineIn{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .signature{
+      text-align:center;
+      margin-top:10px;
+      font-size:16px;
+      color:rgba(255,255,255,.88);
+      opacity:0;
+      letter-spacing:.4px;
+    }
+
+    .signature.show{
+      animation:fadeSig 1.1s ease forwards;
+    }
+
+    @keyframes fadeSig{
+      to{ opacity:1; }
+    }
+
+    .love-area{
+      display:flex;
+      justify-content:center;
+      margin-top:16px;
+      opacity:0;
+      transform:translateY(16px);
+    }
+
+    .love-area.show{
+      animation:actionIn .8s ease forwards;
+    }
+
+    @keyframes actionIn{
+      to{
+        opacity:1;
+        transform:translateY(0);
+      }
+    }
+
+    .heart-btn{
+      width:78px;
+      height:78px;
+      border:none;
+      outline:none;
+      border-radius:50%;
+      position:relative;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,.08) 35%, rgba(255,255,255,.04) 60%),
+        linear-gradient(145deg, rgba(255,120,170,.30), rgba(160,130,255,.20));
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:
+        0 0 20px rgba(255,105,165,.28),
+        0 0 42px rgba(145,120,255,.20),
+        inset 0 1px 0 rgba(255,255,255,.25);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      animation:heartBeat 1.4s ease-in-out infinite;
+      overflow:hidden;
+    }
+
+    .heart-btn::before{
+      content:"";
+      position:absolute;
+      inset:8px;
+      border-radius:50%;
+      background:linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.02));
+      pointer-events:none;
+    }
+
+    .heart-btn span{
+      position:relative;
+      z-index:2;
+      font-size:32px;
+      color:#fff;
+      text-shadow:
+        0 0 12px rgba(255,140,190,.55),
+        0 0 22px rgba(255,255,255,.22);
+      transform:translateY(1px);
+    }
+
+    @keyframes heartBeat{
+      0%,100%{ transform:scale(1); }
+      14%{ transform:scale(1.08); }
+      28%{ transform:scale(1); }
+      42%{ transform:scale(1.11); }
+      70%{ transform:scale(1); }
+    }
+
+    .soft-glow{
+      position:absolute;
+      inset:auto;
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,130,190,.18), transparent 70%);
+      filter:blur(20px);
+      pointer-events:none;
+    }
+
+    .glow1{
+      top:-50px;
+      left:-50px;
+    }
+
+    .glow2{
+      bottom:-60px;
+      right:-60px;
+      background:radial-gradient(circle, rgba(150,130,255,.18), transparent 70%);
+    }
+
+    @media (max-width:520px){
+      .noor-text{
+        font-size:46px;
+        letter-spacing:8px;
+      }
+
+      .watermark span{
+        font-size:min(29vw, 140px);
+      }
+
+      .title{
+        font-size:27px;
+      }
+
+      .line{
+        font-size:17px;
+      }
+
+      .start-btn{
+        font-size:20px;
+        padding:17px 30px;
+      }
+
+      .card{
+        max-width:340px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+
+  <div class="particles" id="particles"></div>
+  <div class="roses" id="roses"></div>
+  <div class="petals" id="petals"></div>
+  <div class="flash" id="flash"></div>
+
+  <div class="noor-intro" id="noorIntro">
+    <div class="noor-text">NOOR</div>
+  </div>
+
+  <div class="watermark" id="watermark">
+    <span>NOOR</span>
+  </div>
+
+  <div class="screen">
+    <div class="start-wrap" id="startWrap">
+      <button class="start-btn" id="openBtn">رسالة لك</button>
+    </div>
+
+    <div class="content" id="content">
+      <div class="card">
+        <div class="soft-glow glow1"></div>
+        <div class="soft-glow glow2"></div>
+
+        <div class="mini-label">FROM NOOR</div>
+
+        <div class="title" id="title">إلى اسمك الجميل</div>
+        <div class="divider" id="divider"></div>
+
+        <div class="message-box">
+          <div class="line" id="line1">ما كنتِ مجرد صدفة...</div>
+          <div class="line" id="line2">بل شيئًا لطيفًا غيّر هدوء أيامي.</div>
+          <div class="line" id="line3">ومنذ حضورك، صار للقلب سبب أجمل للابتسام.</div>
+          <div class="line" id="line4">فيكِ شعور يشبه الطمأنينة حين تأتي بلا موعد.</div>
+          <div class="line" id="line5">ولهذا... أحب الأثر الذي يتركه اسمك في روحي.</div>
+
+          <div class="signature" id="signature">بتوقيع: NOOR</div>
+        </div>
+
+        <div class="love-area" id="loveArea">
+          <button class="heart-btn" id="heartBtn"><span>❤</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const openBtn = document.getElementById("openBtn");
+    const startWrap = document.getElementById("startWrap");
+    const content = document.getElementById("content");
+    const flash = document.getElementById("flash");
+    const particles = document.getElementById("particles");
+    const petals = document.getElementById("petals");
+    const roses = document.getElementById("roses");
+    const noorIntro = document.getElementById("noorIntro");
+    const watermark = document.getElementById("watermark");
+
+    const title = document.getElementById("title");
+    const divider = document.getElementById("divider");
+    const lines = [
+      document.getElementById("line1"),
+      document.getElementById("line2"),
+      document.getElementById("line3"),
+      document.getElementById("line4"),
+      document.getElementById("line5")
+    ];
+    const signature = document.getElementById("signature");
+    const loveArea = document.getElementById("loveArea");
+    const heartBtn = document.getElementById("heartBtn");
+
+    function createParticles(){
+      for(let i = 0; i < 22; i++){
+        const s = document.createElement("span");
+        s.className = "spark";
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.bottom = (-10 - Math.random() * 70) + "px";
+        s.style.animationDuration = (8 + Math.random() * 8) + "s";
+        s.style.animationDelay = (Math.random() * 10) + "s";
+        s.style.opacity = 0.2 + Math.random() * 0.5;
+        particles.appendChild(s);
+      }
+    }
+
+    function createPetalBurst(count = 12){
+      for(let i = 0; i < count; i++){
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.style.left = (12 + Math.random() * 76) + "vw";
+        p.style.bottom = (8 + Math.random() * 18) + "vh";
+        p.style.animationDuration = (2.8 + Math.random() * 2.2) + "s";
+        p.style.animationDelay = (Math.random() * 0.5) + "s";
+        p.style.transform = `rotate(${Math.random() * 40 - 20}deg)`;
+        petals.appendChild(p);
+
+        setTimeout(() => p.remove(), 5600);
+      }
+    }
+
+    function createRoseField(count = 8){
+      for(let i = 0; i < count; i++){
+        const rose = document.createElement("div");
+        rose.className = "rose";
+        rose.style.left = (Math.random() * 100) + "vw";
+        rose.style.animationDelay = (Math.random() * 0.8) + "s";
+        rose.style.transform = `scale(${0.75 + Math.random() * 0.45}) rotate(${Math.random() * 10 - 5}deg)`;
+
+        rose.innerHTML = `
+          <div class="bloom">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="stem"></div>
+          <div class="leaf left"></div>
+          <div class="leaf right"></div>
+        `;
+
+        roses.appendChild(rose);
+        setTimeout(() => rose.remove(), 4200);
+      }
+    }
+
+    function resetAnimationState(){
+      title.classList.remove("show");
+      divider.classList.remove("show");
+      signature.classList.remove("show");
+      loveArea.classList.remove("show");
+      lines.forEach(line => line.classList.remove("show"));
+    }
+
+    function runSequence(){
+      resetAnimationState();
+
+      setTimeout(() => {
+        title.classList.add("show");
+        divider.classList.add("show");
+      }, 240);
+
+      lines.forEach((line, index) => {
+        setTimeout(() => {
+          line.classList.add("show");
+        }, 860 + index * 580);
+      });
+
+      setTimeout(() => {
+        signature.classList.add("show");
+      }, 4100);
+
+      setTimeout(() => {
+        loveArea.classList.add("show");
+      }, 4600);
+    }
+
+    function openExperience(){
+      startWrap.classList.add("hide");
+      flash.classList.remove("show");
+      void flash.offsetWidth;
+      flash.classList.add("show");
+
+      createPetalBurst(18);
+      createRoseField(7);
+
+      setTimeout(() => {
+        content.classList.add("show");
+        runSequence();
+      }, 520);
+    }
+
+    openBtn.addEventListener("click", openExperience);
+
+    heartBtn.addEventListener("click", () => {
+      createPetalBurst(20);
+      createRoseField(10);
+    });
+
+    createParticles();
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        noorIntro.classList.add("hide");
+        watermark.classList.add("show");
+      }, 1800);
+    });
+  </script>
+</body>
+  </html>
